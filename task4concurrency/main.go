@@ -42,7 +42,7 @@ func get_data_museum() {
 
 		if contains(a, v.Nama_kota+".csv") == true {
 			var column []string
-			f, err := os.Open(v.Nama_kota.Kota + ".csv")
+			f, err := os.Open(v.Nama_kota + ".csv")
 			if err != nil {
 				log.Fatal(err)
 			}
