@@ -40,18 +40,41 @@ func get_data_museum() {
 			a = append(a, f.Name())
 		}
 
-		if contains(a, res.Kota+".csv") == true {
-			writer := csv.NewWriter(res.Kota + ".csv")
+		if contains(a, v[index_nama_kota]+".csv") == true {
+			var column []string
+			f, err := os.Open(v[index_nama_kota].Kota + ".csv")
+			if err != nil {
+				log.Fatal(err)
+			}
+			read := csv.NewReader(f)
+			lines, err := read.ReadAll()
+			if err != nil {
+				log.Fatal(err)
+			}
+			if err = f.Close(); err != nil {
+				log.Fatal(err)
+			}
+
+			// add column
+			l := len(lines)
+			if len(column) < l {
+				l = len(column)
+			}
+			for i := 0; i < l; i++ {
+				lines[i] = append(lines[i], column[i])
+			}
+
+			writer := csv.NewWriter(v[index_nama_kota] + ".csv")
 			defer writer.Flush()
 
-			for _, value := range res {
-				err := writer.Write(value)
-				if err != nil {
-					log.Println("Cannot write to file", err)
-				}
+			w := csv.NewWriter(f)
+			if err = w.WriteAll(lines); err != nil {
+				f.Close()
+				log.Fatal(err)
 			}
+
 		} else {
-			file, err := os.Create(res.Kota + ".csv")
+			file, err := os.Create(v[index_nama_kota] + ".csv")
 			if err != nil {
 				log.Println("Cannot create file", err)
 			}
@@ -80,3 +103,9 @@ func contains(slice []string, item string) bool {
 	_, ok := set[item]
 	return ok
 }
+
+// konsep penyimpana ini :
+// 1. mengambil data dari api
+// 2. melakukan pengecekan ada atau tidak file dari kota yang dilooping
+// 3. kalau belum ada membuat file csv.nya dan ditulis
+// 4. kalau sudah ada melakukang pengeditan, dengan penambahan column
