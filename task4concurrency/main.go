@@ -40,9 +40,9 @@ func get_data_museum() {
 			a = append(a, f.Name())
 		}
 
-		if contains(a, v[index_nama_kota]+".csv") == true {
+		if contains(a, v.Nama_kota+".csv") == true {
 			var column []string
-			f, err := os.Open(v[index_nama_kota].Kota + ".csv")
+			f, err := os.Open(v.Nama_kota.Kota + ".csv")
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -64,7 +64,7 @@ func get_data_museum() {
 				lines[i] = append(lines[i], column[i])
 			}
 
-			writer := csv.NewWriter(v[index_nama_kota] + ".csv")
+			writer := csv.NewWriter(v.Nama_kota + ".csv")
 			defer writer.Flush()
 
 			w := csv.NewWriter(f)
@@ -74,7 +74,7 @@ func get_data_museum() {
 			}
 
 		} else {
-			file, err := os.Create(v[index_nama_kota] + ".csv")
+			file, err := os.Create(v.Nama_kota + ".csv")
 			if err != nil {
 				log.Println("Cannot create file", err)
 			}
